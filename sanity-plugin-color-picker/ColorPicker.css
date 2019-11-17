@@ -1,0 +1,28 @@
+.container {
+  /* padding: 10px; */
+}
+
+.colorContainer {
+  display: inline-block;
+  margin-right: 10px;
+  border-radius: 100%;
+  box-sizing: border-box;
+  transition: all 0.3s ease;
+}
+
+.colorContainer:hover {
+  transform: scale(0.95);
+}
+
+.colorContainer.active .colorItem {
+  border: 2px solid white;
+}
+
+.colorItem {
+  border-radius: 100%;
+  height: 35px;
+  width: 35px;
+  display: block;
+  margin: 0;
+  box-sizing: border-box;
+}
