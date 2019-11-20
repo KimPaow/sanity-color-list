@@ -6,17 +6,16 @@ Display colors for editors to choose from with this custom input component.
 
 ## Installation
 
-1. `npm install sanity-color-picker`
+1. `sanity install color-list`
 2. In your schema:
 
 ```
-import ColorPicker from "sanity-color-picker/lib";
+import ColorPicker from "sanity-color-list/lib";
 
 export default {
   title: "Color Picker",
   name: "colorpicker",
-  type: "string",
-  inputComponent: ColorPicker,
+  type: "colors",
   options: {
     list: [
       { title: "Yellow", value: "#f5c701" },

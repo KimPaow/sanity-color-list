@@ -1,6 +1,6 @@
 {
-  "name": "sanity-color-picker",
-  "version": "1.0.5",
+  "name": "sanity-plugin-color-list",
+  "version": "1.0.11",
   "description": "A custom input component for displaying an array of color to pick from.",
   "main": "index.js",
   "scripts": {
@@ -9,7 +9,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/KimPaow/sanity-color-picker.git"
+    "url": "git+https://github.com/KimPaow/sanity-color-list.git"
   },
   "keywords": [
     "sanity",
@@ -17,21 +17,20 @@
     "color",
     "picker",
     "sanityio",
-    "sanity.io"
+    "sanity.io",
+    "color-list"
   ],
   "author": "Kim Björkman",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/KimPaow/sanity-color-picker/issues"
+    "url": "https://github.com/KimPaow/sanity-color-list/issues"
   },
-  "homepage": "https://github.com/KimPaow/sanity-color-picker#readme",
-  "dependencies": {
-    "prop-types": "^15.7.2"
-  },
+  "homepage": "https://github.com/KimPaow/sanity-color-list#readme",
   "peerDependencies": {
     "@sanity/form-builder": "^0.144.0",
     "@sanity/components": "^0.144.0",
-    "react": "^16.12.0"
+    "react": "^16.12.0",
+    "prop-types": "^15.7.2"
   },
   "devDependencies": {
     "babel-cli": "6.26.0",
