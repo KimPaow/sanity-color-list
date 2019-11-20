@@ -10,9 +10,8 @@ Display colors for editors to choose from with this custom input component.
 2. In your schema:
 
 ```
-import ColorPicker from "sanity-color-list/lib";
-
-export default {
+...,
+{
   title: "Color Picker",
   name: "colorpicker",
   type: "colors",
@@ -27,7 +26,8 @@ export default {
       { title: "White", value: "#fff" }
     ]
   }
-};
+},
+...
 ```
 
 3. Profit. The component returns the selected value.
