@@ -30,4 +30,4 @@ Display colors for editors to choose from with this custom input component.
 ...
 ```
 
-3. Profit. The component returns the selected value.
+Profit. The component returns the selected value.
