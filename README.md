@@ -7,7 +7,7 @@ Display colors for editors to choose from with this custom input component.
 ## Installation
 
 1. `npm install sanity-color-picker`
-1. In your schema:
+2. In your schema:
 
 ```
 import ColorPicker from "sanity-color-picker/lib";
@@ -31,4 +31,4 @@ export default {
 };
 ```
 
-1. Profit. The component returns the selected value.
+3. Profit. The component returns the selected value.
