@@ -10,19 +10,6 @@ let isActive = false;
 let isWhite = false;
 
 class ColorPicker extends React.Component {
-  static propTypes = {
-    type: PropTypes.shape({
-      title: PropTypes.string,
-      description: PropTypes.string,
-      options: PropTypes.shape({
-        title: PropTypes.string,
-        value: PropTypes.string
-      }).isRequired
-    }).isRequired,
-    value: PropTypes.string,
-    onChange: PropTypes.func.isRequired
-  };
-
   focus() {
     this.inputElement ? this.inputElement.focus() : null;
   }
@@ -89,5 +76,18 @@ class ColorPicker extends React.Component {
     );
   }
 }
+
+ColorPicker.propTypes = {
+  type: PropTypes.shape({
+    title: PropTypes.string,
+    description: PropTypes.string,
+    options: PropTypes.shape({
+      title: PropTypes.string,
+      value: PropTypes.string
+    }).isRequired
+  }).isRequired,
+  value: PropTypes.string,
+  onChange: PropTypes.func.isRequired
+};
 
 export default ColorPicker;

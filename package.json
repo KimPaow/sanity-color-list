@@ -1,9 +1,10 @@
 {
   "name": "sanity-color-picker",
-  "version": "1.0.0",
+  "version": "1.0.5",
   "description": "A custom input component for displaying an array of color to pick from.",
   "main": "index.js",
   "scripts": {
+    "build": "babel src -d lib --copy-files",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -23,5 +24,18 @@
   "bugs": {
     "url": "https://github.com/KimPaow/sanity-color-picker/issues"
   },
-  "homepage": "https://github.com/KimPaow/sanity-color-picker#readme"
+  "homepage": "https://github.com/KimPaow/sanity-color-picker#readme",
+  "dependencies": {
+    "prop-types": "^15.7.2"
+  },
+  "peerDependencies": {
+    "@sanity/form-builder": "^0.144.0",
+    "@sanity/components": "^0.144.0",
+    "react": "^16.12.0"
+  },
+  "devDependencies": {
+    "babel-cli": "6.26.0",
+    "babel-preset-es2015": "6.24.1",
+    "babel-preset-react": "6.24.1"
+  }
 }
