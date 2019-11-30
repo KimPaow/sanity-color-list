@@ -16,7 +16,7 @@ Display colors for editors to choose from with this custom input component.
   name: "colorpicker",
   type: "colors",
   options: {
-    borderradius: "100%", // can be any valid border-radius value
+    borderradius: "100%", // can be any valid border-radius value, defaults to 100%
     list: [
       { title: "Yellow", value: "rgba(245, 199, 1, 0.5)" }, // can be any valid color value
       { title: "Pink", value: "rgb(246, 206, 219)" },
