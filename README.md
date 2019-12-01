@@ -1,4 +1,4 @@
-# Sanity Color Picker
+# Sanity Color List
 
 Display colors for editors to choose from with this custom input component.
 
@@ -12,9 +12,10 @@ Display colors for editors to choose from with this custom input component.
 ```js
 ...,
 {
-  title: "Color Picker",
-  name: "colorpicker",
-  type: "colors",
+  title: "Color List",
+  description: "Pick a color",
+  name: "colorlist",
+  type: "colors", // required
   options: {
     borderradius: "100%", // can be any valid border-radius value, defaults to 100%
     list: [
