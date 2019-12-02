@@ -1,4 +1,4 @@
-import ColorPicker from "./lib";
+import ColorPicker from "../lib";
 
 export default {
   name: "colors",

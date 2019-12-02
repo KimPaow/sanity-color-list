@@ -6,7 +6,7 @@
   "parts": [
     {
       "implements": "part:@sanity/base/schema-type",
-      "path": "./schema.js"
+      "path": "./lib/schema.js"
     }
   ]
 }

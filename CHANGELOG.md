@@ -2,7 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
-## [1.1.0] - 2017-06-20
+## [1.1.11] - 2019-12-02
+
+### Added
+
+- Transpiled schema.js to fix errors with the graphql deploy command.
+
+## [1.1.1] - 2019-12-01
 
 ### Added
 
