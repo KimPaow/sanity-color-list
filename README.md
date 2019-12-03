@@ -17,6 +17,7 @@ Display colors for editors to choose from with this custom input component.
   name: "colorlist",
   type: "colors", // required
   options: {
+    background: "black", // If you are using a theme for your studio with a non-white bg this should reflect that same non-white bg value.
     borderradius: "100%", // can be any valid border-radius value, defaults to 100%
     list: [
       { title: "Yellow", value: "rgba(245, 199, 1, 0.5)" }, // can be any valid color value
