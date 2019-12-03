@@ -34,3 +34,6 @@ Display colors for editors to choose from with this custom input component.
 ```
 
 Done. The component returns the selected value.
+
+### TODO
+* Restyle the color objects to use transparency so that the 'background' option can be deprecated.
