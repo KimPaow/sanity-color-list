@@ -72,6 +72,16 @@ class ColorPicker extends React.Component {
   createColors(colors, value, options) {
     const borderradius = options.borderradius || "100%";
     const borderColor = options.background || "#fff";
+    const { bgR = '', bgG = '', bgB = '', bgA = '' } = this.getColorProperties(options.background || '')
+    let bgIsWhite = false;
+
+    if (
+      (bgR.includes("255") && bgG.includes("255") && bgB.includes("255")) ||
+      options.background === "white"
+    ) {
+      bgIsWhite = true;
+    }
+
     return colors.map((color, i) => {
       let { r, g, b, a } = this.getColorProperties(color.value);
 
@@ -117,14 +127,15 @@ class ColorPicker extends React.Component {
 
         // if active and white set a lightgrey outer border and an inset boxshadow
         if (isWhite) {
-          containerStyles.border = "2px solid rgba(23, 23, 23, 0.1)";
+          containerStyles.border = (!bgIsWhite) ? "2px solid white" : "2px solid rgba(23, 23, 23, 0.1)";
           innerStyles.boxShadow = "inset 0px 0px 0px 1px rgba(23, 23, 23, 0.1)";
         }
       }
 
       // if white and not active set a grey border
       if (isWhite && !isActive) {
-        innerStyles.boxShadow = "inset 0px 0px 0px 1px rgba(23, 23, 23, 0.1)";
+        // if no background is set or if the bg that is set is white...
+        (!options.background || bgIsWhite) ? innerStyles.boxShadow = "inset 0px 0px 0px 1px rgba(23, 23, 23, 0.1)" : null;
       }
 
       return (
