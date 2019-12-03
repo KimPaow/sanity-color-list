@@ -10,10 +10,6 @@
   transform: scale(0.95);
 }
 
-.colorContainer.active .colorItem {
-  border: 2px solid white;
-}
-
 .colorItem {
   border-radius: 100%;
   height: 35px;

@@ -71,6 +71,7 @@ class ColorPicker extends React.Component {
 
   createColors(colors, value, options) {
     const borderradius = options.borderradius || "100%";
+    const borderColor = options.background || "#fff";
     return colors.map((color, i) => {
       let { r, g, b, a } = this.getColorProperties(color.value);
 
@@ -83,13 +84,13 @@ class ColorPicker extends React.Component {
 
       // if color is transparent, replace the displayed color with a 100% opacity version
       if (a == 0) displayColor = opaqueColor;
-
       let containerStyles = {
-        border: "2px solid white",
+        border: `2px solid ${borderColor}`,
         borderRadius: borderradius
       };
 
       let innerStyles = {
+        border: `2px solid ${borderColor}`,
         backgroundColor: displayColor,
         borderRadius: borderradius
       };
