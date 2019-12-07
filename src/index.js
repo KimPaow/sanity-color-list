@@ -3,11 +3,10 @@ import styles from "./ColorPicker.css";
 import PropTypes from "prop-types";
 import FormField from "part:@sanity/components/formfields/default";
 import PatchEvent, { set, unset } from "part:@sanity/form-builder/patch-event";
+import { TinyColor } from "@ctrl/tinycolor";
 
 const createPatchFrom = value =>
   PatchEvent.from(value === "" ? unset() : set(value));
-let isActive = false;
-let isWhite = false;
 
 class ColorPicker extends React.Component {
   focus() {
@@ -18,124 +17,74 @@ class ColorPicker extends React.Component {
     this.props.onChange(createPatchFrom(event.target.dataset.color.toString()));
   }
 
-  getColorProperties(colorBase) {
-    let color = colorBase.toString();
-    let hex = "";
-    var r, g, b, a, hsp;
+  getDisplayColor({ tc, value }) {
+    let alpha = tc.getAlpha();
 
-    // Check the format of the color, HEX or RGB?
-    if (color.match(/^rgb/)) {
-      color = color.match(
-        /rgba?\(((25[0-5]|2[0-4]\d|1\d{1,2}|\d\d?)\s*,\s*?){2}(25[0-5]|2[0-4]\d|1\d{1,2}|\d\d?)\s*,?\s*([01]\.?\d*?)?\)/
-      );
-
-      r = color[1];
-      g = color[2];
-      b = color[3];
-      a = color[4];
-    } else {
-      color = +(
-        "0x" + color.slice(1).replace(color.length < 5 && /./g, "$&$&")
-      );
-
-      hex = color;
-      r = color >> 16;
-      g = (color >> 8) & 255;
-      b = color & 255;
+    if (alpha === 0) {
+      tc.setAlpha(1);
+      return tc.toHex();
     }
 
-    hsp = Math.sqrt(0.299 * (r * r) + 0.587 * (g * g) + 0.114 * (b * b));
-
-    // Using the HSP value, determine whether the color is light or dark
-    if (hsp > 127.5) {
-      return {
-        r: r,
-        g: g,
-        b: b,
-        a: a,
-        brightness: "light"
-      };
-    } else {
-      return {
-        r: r,
-        g: g,
-        b: b,
-        a: a,
-        brightness: "dark",
-        hex: hex,
-        rgb: `rgb(${r}, ${g}, ${b})`,
-        rgba: `rgba(${r}, ${g}, ${b}, ${a})`
-      };
-    }
+    return value;
   }
 
   createColors(colors, value, options) {
     const borderradius = options.borderradius || "100%";
-    const borderColor = options.background || "#fff";
-    const { bgR = '', bgG = '', bgB = '', bgA = '' } = this.getColorProperties(options.background || '')
-    let bgIsWhite = false;
-
-    if (
-      (bgR.includes("255") && bgG.includes("255") && bgB.includes("255")) ||
-      options.background === "white"
-    ) {
-      bgIsWhite = true;
-    }
+    const bg = options.background ? new TinyColor(options.background) : false;
+    const bgBrightness = bg ? bg.getBrightness() : 255;
+    const bgIsWhite = bgBrightness === 255 ? true : false;
+    const contrastThreshold = 10;
 
     return colors.map((color, i) => {
-      let { r, g, b, a } = this.getColorProperties(color.value);
+      if (!color.value) return null;
 
-      r = r ? r.toString().replace(",", "") : "";
-      g = g ? g.toString().replace(",", "") : "";
-      b = b ? b.toString().replace(",", "") : "";
+      let tc = new TinyColor(color.value);
 
-      let displayColor = color.value;
-      let opaqueColor = `rgb(${r}, ${g}, ${b})`;
+      const isActive = value && value === color.value ? true : false;
+      const brightness = tc.getBrightness();
+      const contrast =
+        bgBrightness > brightness
+          ? bgBrightness - brightness
+          : brightness - bgBrightness;
+      const isWhite = tc.getBrightness() === 255;
+      const displayColor = this.getDisplayColor({ tc: tc, value: color.value });
 
-      // if color is transparent, replace the displayed color with a 100% opacity version
-      if (a == 0) displayColor = opaqueColor;
+      // console.log(`${color.title} | contrast to white: ${contrast}`);
+
       let containerStyles = {
-        border: `2px solid ${borderColor}`,
         borderRadius: borderradius
       };
 
       let innerStyles = {
-        border: `2px solid ${borderColor}`,
         backgroundColor: displayColor,
         borderRadius: borderradius
       };
 
-      // check if color is white
-      if (
-        (r.includes("255") && g.includes("255") && b.includes("255")) ||
-        color.value === "white"
-      ) {
-        isWhite = true;
-      } else {
-        isWhite = false;
-      }
-
-      if (value && value === color.value) {
-        isActive = true;
-      } else {
-        isActive = false;
-      }
-
       // if active set an outer border
       if (isActive) {
         containerStyles.border = `2px solid ${displayColor}`;
+        innerStyles.width = "28px";
+        innerStyles.height = "28px";
 
         // if active and white set a lightgrey outer border and an inset boxshadow
+        // if active and lowcontrast
         if (isWhite) {
-          containerStyles.border = (!bgIsWhite) ? "2px solid white" : "2px solid rgba(23, 23, 23, 0.1)";
+          // if bg is not white it's safe to set a white border
+          containerStyles.border = !bgIsWhite
+            ? "2px solid white"
+            : "2px solid rgba(23, 23, 23, 0.1)";
           innerStyles.boxShadow = "inset 0px 0px 0px 1px rgba(23, 23, 23, 0.1)";
         }
       }
 
       // if white and not active set a grey border
+      // if lowcontrast... lower color brightness of outer border?
       if (isWhite && !isActive) {
         // if no background is set or if the bg that is set is white...
-        (!options.background || bgIsWhite) ? innerStyles.boxShadow = "inset 0px 0px 0px 1px rgba(23, 23, 23, 0.1)" : null;
+        !options.background || bgIsWhite
+          ? (innerStyles.boxShadow =
+              "inset 0px 0px 0px 1px rgba(23, 23, 23, 0.1)")
+          : null;
       }
 
       return (
