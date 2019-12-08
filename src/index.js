@@ -17,74 +17,82 @@ class ColorPicker extends React.Component {
     this.props.onChange(createPatchFrom(event.target.dataset.color.toString()));
   }
 
-  getDisplayColor({ tc, value }) {
-    let alpha = tc.getAlpha();
+  getDisplayColor({ tinycolor, color }) {
+    let alpha = tinycolor.getAlpha();
+    let hex = tinycolor.toHex();
 
     if (alpha === 0) {
-      tc.setAlpha(1);
-      return tc.toHex();
+      tinycolor.setAlpha(1);
     }
 
-    return value;
+    return hex ? `#${hex}` : color.value;
   }
 
   createColors(colors, value, options) {
-    const borderradius = options.borderradius || "100%";
-    const bg = options.background ? new TinyColor(options.background) : false;
+    const {
+      borderradius,
+      background,
+      contrastcutoff,
+      lighten,
+      darken
+    } = options;
+    const borderRadius = borderradius || "100%";
+    const bg = background ? new TinyColor(background) : false;
     const bgBrightness = bg ? bg.getBrightness() : 255;
-    const bgIsWhite = bgBrightness === 255 ? true : false;
-    const contrastThreshold = 10;
+    const contrastThreshold = contrastcutoff ? contrastcutoff : 20;
 
     return colors.map((color, i) => {
-      if (!color.value) return null;
+      if (!color.value) {
+        console.error(
+          `sanity-plugin-color-list could not find a color value. Please check your schema.`
+        );
+        return null;
+      }
 
       let tc = new TinyColor(color.value);
+      if (!tc.isValid) {
+        console.error(
+          `sanity-plugin-color-list could not recognize the color: ${color.value}. Perhaps try another format.`
+        );
+        return null;
+      }
 
-      const isActive = value && value === color.value ? true : false;
+      const isActive =
+        value && value.toString() === color.value.toString() ? true : false;
       const brightness = tc.getBrightness();
       const contrast =
         bgBrightness > brightness
           ? bgBrightness - brightness
           : brightness - bgBrightness;
-      const isWhite = tc.getBrightness() === 255;
-      const displayColor = this.getDisplayColor({ tc: tc, value: color.value });
+      const isLowContrast = contrast < contrastThreshold;
+      const displayColor = this.getDisplayColor({
+        tinycolor: tc,
+        color: color
+      });
+      const adjustedColor = tc.isLight()
+        ? tc.darken(darken ? darken : 10)
+        : tc.lighten(lighten ? lighten : 10);
 
-      // console.log(`${color.title} | contrast to white: ${contrast}`);
-
-      let containerStyles = {
-        borderRadius: borderradius
-      };
-
-      let innerStyles = {
-        backgroundColor: displayColor,
-        borderRadius: borderradius
-      };
-
-      // if active set an outer border
-      if (isActive) {
-        containerStyles.border = `2px solid ${displayColor}`;
-        innerStyles.width = "28px";
-        innerStyles.height = "28px";
-
-        // if active and white set a lightgrey outer border and an inset boxshadow
-        // if active and lowcontrast
-        if (isWhite) {
-          // if bg is not white it's safe to set a white border
-          containerStyles.border = !bgIsWhite
-            ? "2px solid white"
-            : "2px solid rgba(23, 23, 23, 0.1)";
-          innerStyles.boxShadow = "inset 0px 0px 0px 1px rgba(23, 23, 23, 0.1)";
+      let style = {
+        outer: {
+          borderRadius: borderRadius
+        },
+        inner: {
+          backgroundColor: displayColor,
+          borderRadius: borderRadius
         }
+      };
+
+      if (isLowContrast) {
+        style.inner.boxShadow = `inset 0px 0px 0px 1px ${adjustedColor}`;
       }
 
-      // if white and not active set a grey border
-      // if lowcontrast... lower color brightness of outer border?
-      if (isWhite && !isActive) {
-        // if no background is set or if the bg that is set is white...
-        !options.background || bgIsWhite
-          ? (innerStyles.boxShadow =
-              "inset 0px 0px 0px 1px rgba(23, 23, 23, 0.1)")
-          : null;
+      if (isActive) {
+        style.outer.border = isLowContrast
+          ? `2px solid ${adjustedColor}`
+          : `2px solid ${displayColor}`;
+        style.inner.width = "28px";
+        style.inner.height = "28px";
       }
 
       return (
@@ -93,14 +101,14 @@ class ColorPicker extends React.Component {
           className={`${styles.colorContainer} ${
             isActive ? styles.active : ""
           }`}
-          style={containerStyles}
+          style={style.outer}
           ref={element =>
             !this.inputElement ? (this.inputElement = element) : null
           }
         >
           <div
             className={styles.colorItem}
-            style={innerStyles}
+            style={style.inner}
             onClick={event => this.selectColor(event)}
             data-color={color.value}
           ></div>
@@ -136,8 +144,18 @@ ColorPicker.propTypes = {
     title: PropTypes.string,
     description: PropTypes.string,
     options: PropTypes.shape({
-      title: PropTypes.string,
-      value: PropTypes.string
+      background: PropTypes.string,
+      borderradius: PropTypes.string,
+      contrastcutoff: PropTypes.number,
+      lighten: PropTypes.number,
+      darken: PropTypes.number,
+      list: PropTypes.arrayOf(
+        PropTypes.shape({
+          title: PropTypes.string,
+          value: PropTypes.oneOfType([PropTypes.string, PropTypes.object])
+            .isRequired
+        })
+      )
     }).isRequired
   }).isRequired,
   value: PropTypes.string,
