@@ -48,3 +48,7 @@ This plugin offers some ways of customization via the options object. If you don
 {string} list.title
 {string || object} list.value // can be an object with keys for r, g and b or a valid color string. 0x formatted hex strings are not supported at the moment.
 ```
+
+## Changelog
+
+![See the changelog here.](https://github.com/KimPaow/sanity-color-picker/raw/master/CHANGELOG.md)

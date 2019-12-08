@@ -14,9 +14,6 @@ class ColorPicker extends React.Component {
   }
 
   selectColor(activeValue, selectedColor) {
-    console.log(`activeValue: ${activeValue}`);
-    console.log(`selectedColor: ${selectedColor}`);
-
     // unset if you select same color twice
     if (selectedColor === activeValue) {
       this.props.onChange(createPatchFrom(""));
@@ -42,12 +39,16 @@ class ColorPicker extends React.Component {
       darken
     } = options;
     const borderRadius = borderradius || "100%";
-    const bg = background ? new TinyColor(background) : false;
+    const bg = background
+      ? new TinyColor(background)
+      : new TinyColor("#FFFFFF");
     const bgBrightness = bg ? bg.getBrightness() : 255;
     const contrastThreshold = contrastcutoff ? contrastcutoff : 20;
-    const bgAccent = bg.isLight()
-      ? bg.darken(darken ? darken : 10)
-      : bg.lighten(lighten ? lighten : 10);
+    const opacityThreshold = 0.2;
+    const bgAccent =
+      bg && bg.isLight()
+        ? bg.darken(darken ? darken : 10)
+        : bg.lighten(lighten ? lighten : 10);
 
     return colors.map((color, i) => {
       if (!color.value) {
@@ -65,16 +66,12 @@ class ColorPicker extends React.Component {
         return null;
       }
 
-      let isActive = false;
+      const rgbString = tc.toRgbString();
+      const isObj = typeof color.value === "object";
+      let isActive = isObj
+        ? value === rgbString
+        : value === color.value.toString();
 
-      if (value) {
-        if (typeof color.value === "object") {
-          let rgbstring = tc.toRgbString();
-          value === rgbstring ? (isActive = true) : null;
-        } else {
-          value === color.value.toString() ? (isActive = true) : null;
-        }
-      }
       const alpha = tc.getAlpha();
       const brightness = tc.getBrightness();
       const contrast =
@@ -86,11 +83,13 @@ class ColorPicker extends React.Component {
         tinycolor: tc,
         color: color
       });
+      // used for decorating lowcontrast colors
       let adjustedColor = tc.isLight()
         ? tc.darken(darken ? darken : 10)
         : tc.lighten(lighten ? lighten : 10);
 
-      adjustedColor = alpha === 0 ? bgAccent : adjustedColor;
+      // if opacity is low, set adjusted color to use a specific color which contrasts with bg
+      adjustedColor = alpha < opacityThreshold ? bgAccent : adjustedColor;
 
       let style = {
         outer: {
@@ -102,14 +101,16 @@ class ColorPicker extends React.Component {
         }
       };
 
-      if (isLowContrast) {
+      // if lowcontrast decorate the color with an inner 1px border and change the color of the active state border
+      if (isLowContrast || alpha < opacityThreshold) {
         style.inner.boxShadow = `inset 0px 0px 0px 1px ${adjustedColor}`;
       }
 
       if (isActive) {
-        style.outer.border = isLowContrast
-          ? `2px solid ${adjustedColor}`
-          : `2px solid ${displayColor}`;
+        style.outer.border =
+          isLowContrast || alpha < opacityThreshold
+            ? `2px solid ${adjustedColor}`
+            : `2px solid ${displayColor}`;
         style.inner.width = "28px";
         style.inner.height = "28px";
       }
@@ -135,12 +136,9 @@ class ColorPicker extends React.Component {
             onClick={() =>
               this.selectColor(
                 value,
-                typeof color.value == "object"
-                  ? tc.toRgbString()
-                  : color.value.toString()
+                isObj ? rgbString : color.value.toString()
               )
             }
-            data-color={color.value}
           ></div>
         </div>
       );

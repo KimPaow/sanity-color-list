@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.2.0] - 2019-12-08
+
+### Added
+
+- You can now press the selected color to unset the value.
+- Implemented contrast checking to decorate low contrast colors with a more high contrast one.
+- Added options for controlling decoration color values and when to apply it.
+- Added a checkerbackground to items so that low opacity colors are perceived as having opacity.
+
+### Changed
+
+- Refactored a majority of the code to make it more readable as the complexity grew.
+
 ## [1.1.11] - 2019-12-02
 
 ### Added
