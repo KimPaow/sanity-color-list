@@ -33,7 +33,7 @@ Display colors for editors to choose from with this custom input component.
 ...
 ```
 
-Done. The component returns the selected value.
+Done. The component returns the selected value. If your value was an object it will return an rgb string instead.
 
 ## Options
 This plugin offers some ways of customization via the options object. If you don't use an off-white theme in your studio the defaults should work well out of the box.

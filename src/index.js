@@ -13,19 +13,24 @@ class ColorPicker extends React.Component {
     this.inputElement ? this.inputElement.focus() : null;
   }
 
-  selectColor(event) {
-    this.props.onChange(createPatchFrom(event.target.dataset.color.toString()));
+  selectColor(activeValue, selectedColor) {
+    console.log(`activeValue: ${activeValue}`);
+    console.log(`selectedColor: ${selectedColor}`);
+
+    // unset if you select same color twice
+    if (selectedColor === activeValue) {
+      this.props.onChange(createPatchFrom(""));
+    } else {
+      this.props.onChange(createPatchFrom(selectedColor.toString()));
+    }
   }
 
   getDisplayColor({ tinycolor, color }) {
-    let alpha = tinycolor.getAlpha();
-    let hex = tinycolor.toHex();
-
-    if (alpha === 0) {
-      tinycolor.setAlpha(1);
+    if (typeof color.value === "object") {
+      return tinycolor.toRgbString();
     }
 
-    return hex ? `#${hex}` : color.value;
+    return color.value;
   }
 
   createColors(colors, value, options) {
@@ -40,6 +45,9 @@ class ColorPicker extends React.Component {
     const bg = background ? new TinyColor(background) : false;
     const bgBrightness = bg ? bg.getBrightness() : 255;
     const contrastThreshold = contrastcutoff ? contrastcutoff : 20;
+    const bgAccent = bg.isLight()
+      ? bg.darken(darken ? darken : 10)
+      : bg.lighten(lighten ? lighten : 10);
 
     return colors.map((color, i) => {
       if (!color.value) {
@@ -57,21 +65,32 @@ class ColorPicker extends React.Component {
         return null;
       }
 
-      const isActive =
-        value && value.toString() === color.value.toString() ? true : false;
+      let isActive = false;
+
+      if (value) {
+        if (typeof color.value === "object") {
+          let rgbstring = tc.toRgbString();
+          value === rgbstring ? (isActive = true) : null;
+        } else {
+          value === color.value.toString() ? (isActive = true) : null;
+        }
+      }
+      const alpha = tc.getAlpha();
       const brightness = tc.getBrightness();
       const contrast =
         bgBrightness > brightness
           ? bgBrightness - brightness
           : brightness - bgBrightness;
-      const isLowContrast = contrast < contrastThreshold;
+      const isLowContrast = contrast <= contrastThreshold;
       const displayColor = this.getDisplayColor({
         tinycolor: tc,
         color: color
       });
-      const adjustedColor = tc.isLight()
+      let adjustedColor = tc.isLight()
         ? tc.darken(darken ? darken : 10)
         : tc.lighten(lighten ? lighten : 10);
+
+      adjustedColor = alpha === 0 ? bgAccent : adjustedColor;
 
       let style = {
         outer: {
@@ -107,9 +126,20 @@ class ColorPicker extends React.Component {
           }
         >
           <div
+            className={styles.colorItemBg}
+            style={isActive ? { width: "28px", height: "28px" } : {}}
+          />
+          <div
             className={styles.colorItem}
             style={style.inner}
-            onClick={event => this.selectColor(event)}
+            onClick={() =>
+              this.selectColor(
+                value,
+                typeof color.value == "object"
+                  ? tc.toRgbString()
+                  : color.value.toString()
+              )
+            }
             data-color={color.value}
           ></div>
         </div>
