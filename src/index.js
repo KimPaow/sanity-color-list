@@ -38,7 +38,8 @@ class ColorPicker extends React.Component {
       lighten,
       darken
     } = options;
-    const borderRadius = borderradius || "100%";
+    const borderRadiusInner = (borderradius || {}).inner || "100%";
+    const borderRadiusOuter = (borderradius || {}).outer || "100%";
     const bg = background
       ? new TinyColor(background)
       : new TinyColor("#FFFFFF");
@@ -93,11 +94,11 @@ class ColorPicker extends React.Component {
 
       let style = {
         outer: {
-          borderRadius: borderRadius
+          borderRadius: borderRadiusOuter
         },
         inner: {
           backgroundColor: displayColor,
-          borderRadius: borderRadius
+          borderRadius: borderRadiusInner
         }
       };
 
@@ -173,7 +174,10 @@ ColorPicker.propTypes = {
     description: PropTypes.string,
     options: PropTypes.shape({
       background: PropTypes.string,
-      borderradius: PropTypes.string,
+      borderradius: PropTypes.shape({
+        outer: PropTypes.string,
+        inner: PropTypes.string
+      }),
       contrastcutoff: PropTypes.number,
       lighten: PropTypes.number,
       darken: PropTypes.number,

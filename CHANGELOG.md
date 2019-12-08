@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.2.1] - 2019-12-08
+
+### Changed
+
+- The borderradius option is now an object which accepts inner and outer radius.
+
 ## [1.2.0] - 2019-12-08
 
 ### Added
@@ -33,6 +39,3 @@ All notable changes to this project will be documented in this file.
 
 - The way white is displayed, now with a thinner border.
 - Streamlined the code a lot for better readability/mutability.
-
-[unreleased]: https://github.com/olivierlacan/keep-a-changelog/compare/v1.1.0...HEAD
-[1.0.0]: https://github.com/kimpaow/sanity-color-list/compare/v1.0.15...v1.1.0
