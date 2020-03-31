@@ -1,4 +1,4 @@
-![https://img.shields.io/npm/dm/sanity-plugin-color-list](https://img.shields.io/npm/dm/sanity-plugin-color-list)
+[![npm](https://img.shields.io/npm/dw/sanity-plugin-color-list?color=%235E6AD2&style=for-the-badge)](https://www.npmjs.com/package/sanity-plugin-color-list)
 
 # Sanity Color List
 
