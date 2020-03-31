@@ -1,3 +1,5 @@
+![npm](https://img.shields.io/npm/dm/sanity-plugin-color-list)
+
 # Sanity Color List
 
 Display colors for editors to choose from with this custom input component.
