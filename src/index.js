@@ -4,30 +4,30 @@ import PropTypes from 'prop-types'
 import FormField from 'part:@sanity/components/formfields/default?'
 import PatchEvent, {set, unset} from 'part:@sanity/form-builder/patch-event?'
 import {getStaticKey} from './helpers'
+import {isEqual} from 'lodash'
 import {TinyColor} from '@ctrl/tinycolor'
 import {ListItem, Pattern, Color} from './components'
-import {Inline, studioTheme, ThemeProvider} from '@sanity/ui'
+import {studioTheme, ThemeProvider} from '@sanity/ui'
 
 const createPatchFrom = value => PatchEvent.from(value === '' ? unset() : set(value))
 
-const handleClick = (activeValue, selectedColor, onChange) => {
-  // unset if you select same color twice
-  if (selectedColor === activeValue) {
-    onChange(createPatchFrom(''))
+const handleChange = ({prevValue, newValue, onChange}) => {
+  if (newValue === prevValue) {
+    onChange(createPatchFrom(undefined))
   } else {
-    onChange(createPatchFrom(selectedColor.toString()))
+    onChange(createPatchFrom(newValue))
   }
 }
 
 const getDisplayColor = ({tinycolor, color = {}}) => {
-  if (typeof color.value === 'object') {
+  if (typeof color === 'object') {
     return tinycolor.toRgbString()
   }
 
-  return color.value
+  return color
 }
 
-const createColors = (activeValue, options, onChange) => {
+const createColors = (activeValue, name, options, onChange) => {
   const {
     list = [],
     borderradius,
@@ -59,25 +59,22 @@ const createColors = (activeValue, options, onChange) => {
       return null
     }
 
-    const rgbString = currentColor.toRgbString()
     const isLowContrast = Math.abs(bgBrightness - currentColor.getBrightness()) <= contrastcutoff
     const isLowAlpha = currentColor.getAlpha() < opacityThreshold
 
-    // update these... since new value is object, not string
     const displayColor = getDisplayColor({
       tinycolor: currentColor,
-      color: color,
+      color: color.value,
     })
-    const isObj = typeof color.value === 'object'
-    const isActive = isObj ? activeValue === rgbString : activeValue === color.value.toString()
+    const isActive = isEqual(activeValue, color)
 
     let decoratorColor = currentColor.isLight() ? currentColor.darken(darken) : currentColor.lighten(lighten)
-    // if opacity is low, use a specific color which contrasts with bg instead
     decoratorColor = isLowAlpha ? bgAccent : decoratorColor
+    color.value = displayColor
 
     return (
       <ListItem
-        key={getStaticKey(displayColor)}
+        key={getStaticKey(displayColor + i)}
         isActive={isActive}
         color={(isLowContrast || isLowAlpha) ? decoratorColor : displayColor}
         radius={outer}
@@ -86,21 +83,31 @@ const createColors = (activeValue, options, onChange) => {
           isActive={isActive}
         />
         <Color
+          type="radio"
+          role="radio"
+          name={name}
+          aria-label={color.title}
+          checked={isActive}
+          aria-checked={isActive}
+          value={color}
+          // eslint-disable-next-line react/jsx-no-bind
+          onChange={() => handleChange({prevValue: activeValue, newValue: color, onChange})}
+          // eslint-disable-next-line react/jsx-no-bind
+          onClick={() => handleChange({prevValue: activeValue, newValue: color, onChange})}
           isActive={isActive}
-          fillColor={displayColor}
           radius={inner}
           hasOutline={isLowContrast || isLowAlpha}
           outlineColor={decoratorColor}
-          // eslint-disable-next-line react/jsx-no-bind
-          onClick={() => handleClick(activeValue, isObj ? rgbString : color.value.toString(), onChange)}
+          fillColor={displayColor}
         />
       </ListItem>
     )
   })
 }
 
-const ColorPicker = forwardRef(({onChange, level, value, type, ...props}, ref) => {
-  const {title, description, options} = type || {}
+const ColorList = forwardRef(({onChange, level, value, type}, ref) => {
+  const {title, description, options, name} = type || {}
+  const groupName = getStaticKey(name)
   return (
     <ThemeProvider theme={studioTheme}>
       <FormField
@@ -108,15 +115,17 @@ const ColorPicker = forwardRef(({onChange, level, value, type, ...props}, ref) =
         description={description}
         level={level}
       >
-        <Inline space={[2, 2, 3]} style={{padding: 0, marginRight: '15px'}} as="ul" ref={ref}>{createColors(value, options, onChange)}</Inline>
+        <ul style={{padding: 0, marginRight: '15px'}} ref={ref} role="radiogroup">
+          {createColors(value, groupName, options, onChange)}
+        </ul>
       </FormField>
     </ThemeProvider>
   )
 })
 
-ColorPicker.displayName = 'ColorList'
+ColorList.displayName = 'ColorList'
 
-ColorPicker.propTypes = {
+ColorList.propTypes = {
   type: PropTypes.shape({
     title: PropTypes.string,
     description: PropTypes.string,
@@ -137,9 +146,18 @@ ColorPicker.propTypes = {
       ),
     }).isRequired,
   }).isRequired,
-  level: PropTypes.any,
-  value: PropTypes.string,
+  level: PropTypes.number,
+  value: PropTypes.shape({
+    value: PropTypes.string,
+    title: PropTypes.string
+  }),
   onChange: PropTypes.func.isRequired,
 }
 
-export default ColorPicker
+ColorList.defaultProps = {
+  level: undefined,
+  value: undefined,
+  onChange: undefined
+}
+
+export default ColorList

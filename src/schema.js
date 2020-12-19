@@ -1,8 +1,22 @@
-import ColorPicker from '../lib'
+import ColorList from '../lib'
 
 export default {
-  name: 'colors',
-  type: 'string',
   title: 'Colors',
-  inputComponent: ColorPicker
+  name: 'colors',
+  type: 'object',
+  fields: [
+    {
+      name: 'title',
+      type: 'string'
+    },
+    {
+      name: 'label',
+      type: 'string'
+    },
+    {
+      name: 'value',
+      type: 'string'
+    },
+  ],
+  inputComponent: ColorList
 }

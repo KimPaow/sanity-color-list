@@ -1,14 +1,20 @@
 import styled, {css} from 'styled-components'
 
 export const ListItem = styled.li`
-  display: block;
+  display: inline-block;
+  margin-right: 10px;
   border-radius: 100%;
   box-sizing: border-box;
-  transition: transform 0.1s ease;
   position: relative;
   height: 38px;
   width: 38px;
   border-color: ${props => props.color};
+
+  &:hover > * {
+    width: ${props => (props.isActive ? '26px' : '34px')};
+    height: ${props => (props.isActive ? '26px' : '34px')};
+    cursor: pointer;
+  }
 
   ${props => props.isActive && css`
     border-width: 2px;
@@ -46,8 +52,9 @@ export const Pattern = styled.div`
   `}
 `
 
-export const Color = styled.div`
+export const Color = styled.input`
   border-radius: ${props => props.radius};
+  appearance: none;
   height: 36px;
   width: 36px;
   display: block;
@@ -58,6 +65,10 @@ export const Color = styled.div`
   left: 50%;
   transform: translate(-50%, -50%);
   background-color: ${props => props.fillColor};
+
+  &:focus {
+    outline: none;
+  }
 
   ${props => props.hasOutline && css`
     box-shadow: inset 0px 0px 0px 1px ${props.outlineColor};
