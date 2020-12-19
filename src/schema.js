@@ -1,8 +1,8 @@
-import ColorPicker from "../lib";
+import ColorPicker from '../lib'
 
 export default {
-  name: "colors",
-  type: "string",
-  title: "Colors",
+  name: 'colors',
+  type: 'string',
+  title: 'Colors',
   inputComponent: ColorPicker
-};
+}
