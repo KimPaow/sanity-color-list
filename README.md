@@ -17,10 +17,6 @@ Display colors for editors to choose from with this custom input component.
   name: "colorlist",
   type: "colors", // required
   options: {
-    borderradius: {
-      outer: "100%",
-      inner: "100%"
-    },
     list: [
       { title: "Yellow", value: "rgba(245, 199, 1, 0.5)" },
       { title: "Pink", value: {r: 246, g: 206, b: 219} },
@@ -48,6 +44,7 @@ This plugin offers some ways of customization via the options object. If you don
 {number} [contrastcutoff=20] // 0-255. When the contrast between the background and the color falls below this level decorate the item with a lighter/darker value for better contrast
 {number} [darken=10] // How much darker than the actual color the decoration color will be
 {number} [lighten=10] // How much lighter than the actual color the decoration color will be
+{bool} [tooltip] // Set to true to show a tooltip with the colors title on hover/focus
 {object} list
 {string} list.title
 {string || object} list.value // can be an object with keys for r, g and b or a valid color string. 0x formatted hex strings are not supported at the moment.

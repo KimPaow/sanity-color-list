@@ -2,7 +2,7 @@ import ColorList from '../lib'
 
 export default {
   title: 'Colors',
-  name: 'colors',
+  name: 'colorlist',
   type: 'object',
   fields: [
     {
