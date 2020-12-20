@@ -4,18 +4,19 @@ import PropTypes from 'prop-types'
 import FormField from 'part:@sanity/components/formfields/default?'
 import PatchEvent, {set, unset} from 'part:@sanity/form-builder/patch-event?'
 import {getStaticKey} from './helpers'
-import {isEqual, uniqueId} from 'lodash'
+import {uniqueId} from 'lodash'
 import {TinyColor} from '@ctrl/tinycolor'
 import {List, ListItem, Pattern, Color, ConditionalWrapper, ToolTip} from './components'
 import {studioTheme, ThemeProvider} from '@sanity/ui'
 
-const createPatchFrom = value => PatchEvent.from(value === '' ? unset() : set(value))
+
+const checkEqual = (a, b) => a?.value === b?.value && a?.title === b?.title
 
 const handleChange = ({prevValue, newValue, onChange}) => {
-  if (newValue === prevValue) {
-    onChange(createPatchFrom(undefined))
+  if (checkEqual(newValue, prevValue)) {
+    onChange(PatchEvent.from(unset()))
   } else {
-    onChange(createPatchFrom(newValue))
+    onChange(PatchEvent.from(set(newValue)))
   }
 }
 
@@ -27,7 +28,7 @@ const getDisplayColor = ({tinycolor, color = {}}) => {
   return color
 }
 
-const createColors = ({typeName, activeValue, name, options, onChange, onFocus, readOnly}) => {
+const createColors = ({type, activeValue, name, options, onChange, onFocus, readOnly}) => {
   const {
     list = [],
     tooltip,
@@ -68,16 +69,16 @@ const createColors = ({typeName, activeValue, name, options, onChange, onFocus, 
     const isLowContrast = Math.abs(bgBrightness - currentColor.getBrightness()) <= contrastcutoff
     const isLowAlpha = currentColor.getAlpha() < opacityThreshold
 
+    color._type = type.name
     const displayColor = getDisplayColor({
       tinycolor: currentColor,
       color: color.value,
     })
-    const isActive = isEqual(activeValue, color)
+    const isActive = checkEqual(activeValue, color)
 
     let decoratorColor = currentColor.isLight() ? currentColor.darken(darken) : currentColor.lighten(lighten)
     decoratorColor = isLowAlpha ? bgAccent : decoratorColor
     color.value = displayColor
-    color._type = typeName
 
     return (
       <ConditionalWrapper
@@ -105,6 +106,7 @@ const createColors = ({typeName, activeValue, name, options, onChange, onFocus, 
             value={color}
             onChange={() => handleChange({prevValue: activeValue, newValue: color, onChange})}
             onClick={() => handleChange({prevValue: activeValue, newValue: color, onChange})}
+            onKeyPress={event => (event.key === 'Enter') && handleChange({prevValue: activeValue, newValue: color, onChange})}
             onFocus={onFocus}
             isActive={isActive}
             radius={inner}
@@ -121,12 +123,8 @@ const createColors = ({typeName, activeValue, name, options, onChange, onFocus, 
 const ColorList = forwardRef((props, ref) => {
   const {onChange, level, value, type, readOnly, markers, onFocus, presence} = props
   const validation = markers.filter(marker => marker.type === 'validation')
+  const errors = validation.filter(marker => marker.level === 'error')
   const groupName = uniqueId('ColorList')
-
-  // console.debug('markers: ', markers)
-  // console.debug('validation: ', validation)
-  // console.debug('type: ', type)
-  // console.debug('props: ', props)
 
   return (
     <FormField
@@ -142,9 +140,9 @@ const ColorList = forwardRef((props, ref) => {
         <List
           ref={ref}
           role="radiogroup"
-          hasError={validation.length >= 1}
+          hasError={errors.length > 0}
         >
-          {createColors({typeName: type.name, activeValue: value, name: groupName, options: type.options, onChange, onFocus, readOnly})}
+          {createColors({type, activeValue: value, name: groupName, options: type.options, onChange, onFocus, readOnly})}
         </List>
       </ThemeProvider>
     </FormField>
