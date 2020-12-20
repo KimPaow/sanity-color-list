@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.0.0] - 2019-12-08
+
+Refactored the whole component to make sure accessibility is on point and to add new features.
+
+### Breaking Changes:
+
+- Now returns an object containing both value and title.
+
+### Added
+
+- You can now create the color list by passing a function instead.
+- Support for the Prescence feature.
+- Option to show tooltip of the title on hover.
+
 ## [1.2.1] - 2019-12-08
 
 ### Changed

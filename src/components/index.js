@@ -1,4 +1,25 @@
 import styled, {css} from 'styled-components'
+import React from 'react'
+import {Tooltip, Box, Text} from '@sanity/ui'
+
+export const List = styled.ul`
+  padding: 0;
+  margin: 0 15px 0 0;
+  /* display: flex; */
+  /* flex-wrap: wrap; */
+  border-radius: 2px;
+
+  ${props => {
+    if (props.hasError) {
+      const {color} = props?.theme?.sanity || {}
+      return css`
+        border-left: 2px solid  ${color.solid.critical.enabled.border};
+        padding-left: 15px;
+      `
+    }
+    return ''
+  }}
+`
 
 export const ListItem = styled.li`
   display: inline-block;
@@ -8,7 +29,7 @@ export const ListItem = styled.li`
   position: relative;
   height: 38px;
   width: 38px;
-  border-color: ${props => props.color};
+  border-color: ${props => props.decoratorColor};
 
   &:hover > * {
     width: ${props => (props.isActive ? '26px' : '34px')};
@@ -68,6 +89,24 @@ export const Color = styled.input`
 
   &:focus {
     outline: none;
+
+    &:before {
+      content: '';
+      position: absolute;
+      height: 34px;
+      width: 34px;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      border-radius: ${props => props.radius};
+
+      ${props => {
+    const {color} = props?.theme?.sanity || {}
+    return css`
+          box-shadow: 0px 0px 0px 2px ${color.base.focusRing};
+        `
+  }}
+    }
   }
 
   ${props => props.hasOutline && css`
@@ -79,3 +118,24 @@ export const Color = styled.input`
     height: 28px;
   `}
 `
+
+export const ConditionalWrapper = ({condition, wrapper, children}) => {
+  if (condition) {
+    return wrapper(children)
+  }
+  return children
+}
+
+export const ToolTip = props => {
+  return (
+    <Tooltip
+      content={(
+        <Box padding={2}>
+          <Text size={1}>{props.title}</Text>
+        </Box>
+      )}
+      placement="top"
+      {...props}
+    />
+  )
+}

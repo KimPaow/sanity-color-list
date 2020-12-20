@@ -4,13 +4,10 @@ export default {
   title: 'Colors',
   name: 'colors',
   type: 'object',
+  validation: Rule => Rule.required(),
   fields: [
     {
       name: 'title',
-      type: 'string'
-    },
-    {
-      name: 'label',
       type: 'string'
     },
     {
