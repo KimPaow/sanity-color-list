@@ -49,6 +49,12 @@ const createColors = ({type, activeValue, name, options, onChange, onFocus, read
     colorList = list()
   }
 
+  if (!colorList) {
+    // eslint-disable-next-line no-console
+    console.warn('[color-list] No color values found, aborting.')
+    return null
+  }
+
   return colorList.map((color, i) => {
     if (!color.value) {
     // eslint-disable-next-line no-console
@@ -69,7 +75,6 @@ const createColors = ({type, activeValue, name, options, onChange, onFocus, read
     const isLowContrast = Math.abs(bgBrightness - currentColor.getBrightness()) <= contrastcutoff
     const isLowAlpha = currentColor.getAlpha() < opacityThreshold
 
-    color._type = type.name
     const displayColor = getDisplayColor({
       tinycolor: currentColor,
       color: color.value,

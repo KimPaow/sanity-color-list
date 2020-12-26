@@ -6,7 +6,9 @@
 Display colors for editors to choose from with this custom input component.
 
 ## 2.0.0 Breaking changes
-Starting from 2.0.0 the whole list object is returned and the type has been changed from `colors` to `colorlist`.
+Starting from 2.0.0 the whole color object is returned and the `type` has been changed from `colors` to `colorlist`.
+
+Note: A bug has been found with 2.0.0 if you nest the colorlist type. Until resolved, please use version 1.2.1 if you need to nest the list. Otherwise 2.0.0 is still recommended because of the a11y upgrades.
 
 ![preview image](https://github.com/KimPaow/sanity-color-picker/raw/master/src/images/preview.png)
 
