@@ -8,8 +8,6 @@ Display colors for editors to choose from with this custom input component.
 ## 2.0.0 Breaking changes
 Starting from 2.0.0 the whole color object is returned and the `type` has been changed from `colors` to `colorlist`.
 
-Note: A bug has been found with `2.0.0` if you nest the colorlist type. Until resolved, please use version `1.2.1` if you need to nest the list. Otherwise `2.0.0` is still recommended because of the a11y upgrades.
-
 ![preview image](https://github.com/KimPaow/sanity-color-picker/raw/master/src/images/preview.png)
 
 ## Installation
@@ -26,8 +24,6 @@ Note: A bug has been found with `2.0.0` if you nest the colorlist type. Until re
   type: "colorlist", // required
   options: {
     list: [
-      { title: "Yellow", value: "rgba(245, 199, 1, 0.5)" },
-      { title: "Pink", value: {r: 246, g: 206, b: 219} },
       { title: "Red", value: "#f16d70" },
       { title: "Teal", value: "#88c6db" },
       { title: "Purple", value: "#aca0cc" },
@@ -39,7 +35,7 @@ Note: A bug has been found with `2.0.0` if you nest the colorlist type. Until re
 ...
 ```
 
-Done. The component returns the selected list object value. If the value key was an object it will return an rgb string instead.
+Done. The component returns the selected list object. If the value key was an object it will return an rgb string instead.
 
 ## Options
 This plugin offers some ways of customization via the options object. If you don't use an off-white theme in your studio the defaults should work well out of the box.
