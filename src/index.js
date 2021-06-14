@@ -83,7 +83,6 @@ const createColors = ({type, activeValue, name, options, onChange, onFocus, read
 
     let decoratorColor = currentColor.isLight() ? currentColor.darken(darken) : currentColor.lighten(lighten)
     decoratorColor = isLowAlpha ? bgAccent : decoratorColor
-    color.value = displayColor
 
     return (
       <ConditionalWrapper
