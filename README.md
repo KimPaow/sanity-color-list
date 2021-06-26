@@ -54,20 +54,19 @@ This plugin offers some ways of customization via the options object. If you don
 {string || object} list.value // can be an object with keys for r, g and b or a valid color string. 0x formatted hex strings are not supported at the moment.
 ```
 
-## Contributing
-First run the following commands at the root of this repository.
+# Contributing
 
-```
-npm i
-npm link
-```
+Issues are actively monitored and PRs are welcome. When developing this plugin the easiest setup is:
 
-Then, to include it in your Sanity development project, navigate to the root of your project and run: 
-`npm link sanity-plugin-color-list`.
-You will now reference the local version of the plugin when using the plugin.
-
-Add the script `"dev": "sanity start --preserve-symlinks"` in your studio package.json file.
-Then run `npm run dev` in your local sanity-plugin-color-list repository folder and `npm run dev` in your studio folder.
+1. Fork this repo.
+1. Install the sanity cli and create a sanity project: `npm install -g @sanity/cli && sanity init`. Follow the prompts, starting out with the blog template is a good way to go.
+1. `cd` into your project directory, run `npm install && npm start` - your sanity studio should be running on http://localhost:3333.
+1. `cd` into the `plugins` director of your project.
+1. Fork this repo and clone your fork into the `plugins` directory inside your project `git clone git@github.com:your-fork/sanity-plugin-color-list.git`.
+1. Open `sanity.json`, go to the `plugins` array and add `color-list`.
+1. Re-start the sanity studio server with `npm start`.
+1. Edit `schemas/post.js` and add follow the plugin documentation to add a `colorlist` type field.
+1. Your studio should reload, and now when you edit the plugin code it should reload the studio, when you're done create a branch, put in a PR and a maintainer will review it. Thank you!
 
 ## Changelog
 

@@ -1,12 +1,12 @@
 {
   "paths": {
     "source": "./src",
-    "compiled": "./lib"
+    "compiled": "./build"
   },
   "parts": [
     {
       "implements": "part:@sanity/base/schema-type",
-      "path": "./lib/schema.js"
+      "path": "schema/colorlist.js"
     }
   ]
 }
