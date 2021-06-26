@@ -9,3 +9,4 @@ node_modules
 .eslintignore
 .eslintrc
 .prettierrc
+CHANGELOG.md

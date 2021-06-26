@@ -5,7 +5,7 @@
     "main": "build/index.js",
     "scripts": {
         "build": "sanipack build",
-        "deploy": "npm run build && npm publish",
+        "deploy": "npm publish",
         "prepublishOnly": "sanipack build && sanipack verify",
         "test": "eslint .",
         "watch": "sanipack build --watch"
