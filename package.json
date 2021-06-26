@@ -1,6 +1,6 @@
 {
   "name": "sanity-plugin-color-list",
-  "version": "2.0.1",
+  "version": "2.0.2",
   "description": "A custom input component for displaying an array of color to pick from.",
   "main": "build/index.js",
   "scripts": {
