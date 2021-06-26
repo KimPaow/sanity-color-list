@@ -5,10 +5,10 @@
 
 Display colors for editors to choose from with this custom input component.
 
+![preview image](https://github.com/KimPaow/sanity-color-picker/raw/master/src/images/preview.png)
+
 ## 2.0.0 Breaking changes
 Starting from 2.0.0 the whole color object is returned and the `type` has been changed from `colors` to `colorlist`.
-
-![preview image](https://github.com/KimPaow/sanity-color-picker/raw/master/src/images/preview.png)
 
 ## Installation
 
