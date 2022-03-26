@@ -9,6 +9,8 @@
 # production
 /build
 build
+/lib
+lib
 
 # misc
 .DS_Store
