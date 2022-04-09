@@ -1,6 +1,6 @@
-import styled, {css} from 'styled-components'
+import styled, { css } from 'styled-components'
 import React from 'react'
-import {Tooltip, Box, Text} from '@sanity/ui'
+import { Tooltip, Box, Text } from '@sanity/ui'
 
 export const List = styled.ul`
   padding: 0;
@@ -11,7 +11,7 @@ export const List = styled.ul`
 
   ${props => {
     if (props.hasError) {
-      const {color} = props?.theme?.sanity || {}
+      const { color } = props?.theme?.sanity || {}
       return css`
         border-left: 2px solid  ${color.solid.critical.enabled.border};
         padding-left: 15px;
@@ -24,7 +24,7 @@ export const List = styled.ul`
 export const ListItem = styled.li`
   display: inline-block;
   margin-right: 10px;
-  border-radius: 100%;
+  border-radius: ${props => props.radius};
   box-sizing: border-box;
   position: relative;
   height: 38px;
@@ -101,7 +101,7 @@ export const Color = styled.input`
       border-radius: ${props => props.radius};
 
       ${props => {
-    const {color} = props?.theme?.sanity || {}
+    const { color } = props?.theme?.sanity || {}
     return css`
           box-shadow: 0px 0px 0px 2px ${color.base.focusRing};
         `
@@ -119,7 +119,7 @@ export const Color = styled.input`
   `}
 `
 
-export const ConditionalWrapper = ({condition, wrapper, children}) => {
+export const ConditionalWrapper = ({ condition, wrapper, children }) => {
   if (condition) {
     return wrapper(children)
   }
