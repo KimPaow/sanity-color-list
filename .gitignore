@@ -7,8 +7,6 @@
 /coverage
 
 # production
-/build
-build
 /lib
 lib
 
