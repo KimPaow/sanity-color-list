@@ -42,7 +42,7 @@
         "sanipack": "^2.0.1"
     },
     "peerDependencies": {
-        "@sanity/base": "^2.11.0",
+        "@sanity/base": "^2.27.0",
         "@sanity/form-builder": ">=2.1.3",
         "react": "^16.9 || ^17",
         "styled-components": "^5.2.1"
