@@ -2,12 +2,30 @@
 import { TinyColor } from '@ctrl/tinycolor'
 import { studioTheme, ThemeProvider } from '@sanity/ui'
 import { uniqueId } from 'lodash'
-import FormField from 'part:@sanity/components/formfields/default?'
-import PatchEvent, { set, unset } from 'part:@sanity/form-builder/patch-event?'
+import FormField from 'part:@sanity/components/formfields/default'
+import PatchEvent, { set, unset } from 'part:@sanity/form-builder/patch-event'
 import PropTypes from 'prop-types'
 import React, { forwardRef, useEffect, useState } from 'react'
 import { Color, ConditionalWrapper, List, ListItem, Pattern, ToolTip } from './components'
 import { checkEqual, getColorString, getStaticKey } from './helpers'
+
+type Color = {
+  value: string,
+  title: string
+}
+
+type Options = {
+  tooltip: string,
+  borderradius: {
+    outer: string,
+    inner: string,
+  },
+  background: string,
+  contrastcutoff: number,
+  lighten: number,
+  darken: number,
+  opacityThreshold: number
+}
 
 const handleChange = ({ prevValue, newValue, onChange }) => {
   if (checkEqual(newValue, prevValue)) {
@@ -28,21 +46,19 @@ const createColors = ({ list, type, activeValue, name, options, onChange, onFocu
     lighten = 10,
     darken = 10,
     opacityThreshold = 0.2,
-  } = options || []
+  } = options || {}
   const { inner = '100%', outer = '100%' } = borderradius || {}
   const bg = new TinyColor(background)
   const bgBrightness = bg?.getBrightness() || 255
   const bgAccent = bg?.isLight() ? bg?.darken(darken) : bg?.lighten(lighten)
 
-  let colorList = list
-
-  if (!colorList || !Array.isArray(colorList)) {
+  if (!list || !Array.isArray(list)) {
     // eslint-disable-next-line no-console
     console.warn('[color-list] No color values found, aborting.')
     return null
   }
 
-  return colorList?.map((color, i) => {
+  return list?.map((color: Color, i) => {
     if (!color.value) {
       // eslint-disable-next-line no-console
       console.error('sanity-plugin-color-list could not find a color value. Please check your schema.')
@@ -127,7 +143,7 @@ const createColors = ({ list, type, activeValue, name, options, onChange, onFocu
 }
 
 const ColorList = forwardRef((props, ref) => {
-  const [list, setList] = useState()
+  const [list: Color[], setList] = useState()
   const { onChange, level, value, type, readOnly, markers, onFocus, presence } = props
   const validation = markers.filter(marker => marker.type === 'validation')
   const errors = validation.filter(marker => marker.level === 'error')
@@ -139,7 +155,7 @@ const ColorList = forwardRef((props, ref) => {
       if (listOption instanceof AsyncFunction === true) {
         listOption()
           .then((v) => {
-            setList(v || listOption)
+            setList(v)
           })
           .catch(error => {
             console.error(`Could not get color list: ${error}`);
