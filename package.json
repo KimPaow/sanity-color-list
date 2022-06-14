@@ -4,7 +4,6 @@
     "description": "A custom input component for displaying an array of color to pick from.",
     "main": "build/index.js",
     "scripts": {
-        "prepare": "yarn build",
         "build": "sanipack build",
         "deploy": "npm publish",
         "prepublishOnly": "sanipack build && sanipack verify",
