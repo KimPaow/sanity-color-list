@@ -1,6 +1,6 @@
 {
   "name": "sanity-plugin-color-list",
-  "version": "1.0.0",
+  "version": "3.0.0",
   "description": "Displays a list of colors",
   "keywords": [
     "sanity",
@@ -46,7 +46,10 @@
     "watch": "pkg-utils watch"
   },
   "dependencies": {
-    "@sanity/incompatible-plugin": "^1.0.4"
+    "@ctrl/tinycolor": "^3.4.1",
+    "@sanity/incompatible-plugin": "^1.0.4",
+    "@sanity/ui": "^0.37.22",
+    "@types/styled-components": "^5.1.26"
   },
   "devDependencies": {
     "@sanity/pkg-utils": "^1.18.0",
@@ -64,11 +67,13 @@
     "react": "^18",
     "rimraf": "^3.0.2",
     "sanity": "3.0.0-rc.2",
+    "styled-components": "^5.3.6",
     "typescript": "^4.9.3"
   },
   "peerDependencies": {
     "react": "^18",
-    "sanity": "dev-preview || 3.0.0-rc.2"
+    "sanity": "dev-preview || 3.0.0-rc.2",
+    "styled-components": "^5.3.6"
   },
   "engines": {
     "node": ">=14"
