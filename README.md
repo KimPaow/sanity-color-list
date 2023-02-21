@@ -4,14 +4,14 @@
 
 ## Installation
 
-```
+```bash
 npm install --save sanity-plugin-color-list@studio-v3
 ```
 
 ## Usage
 Add it as a plugin in sanity.config.ts (or .js):
 
-```
+```js
  import {defineConfig} from 'sanity'
  import {myPlugin} from 'sanity-plugin-color-list'
 

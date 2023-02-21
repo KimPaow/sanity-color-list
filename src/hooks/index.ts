@@ -2,6 +2,7 @@ import { TinyColor } from '@ctrl/tinycolor'
 import { useEffect, useState } from 'react'
 import { ColorListOptions, StudioColorValue } from '../components/ColorListInput'
 import { useBackground } from './useBackground'
+import { removeDuplicates } from '../utils'
 // import { checkEqual, getColorString, getStaticKey } from './helpers'
 
 export type ColorInfo = StudioColorValue & { tc: TinyColor; decorator: TinyColor }
@@ -23,20 +24,22 @@ export const useColors = (
     } = options || {}
 
     if (!list || !Array.isArray(list)) {
-      setErrors((state) => [...(state || []), '"list" option is not an array'])
+      setErrors((state) => removeDuplicates([...(state || []), '"list" option is not an array']))
       return
     }
 
     const _colors = list.reduce<ColorInfo[]>((acc, color) => {
       if (!color.value) {
-        setErrors((state) => [...(state || []), 'Could not find a color value'])
+        setErrors((state) => removeDuplicates([...(state || []), 'Could not find a color value']))
         return acc
       }
 
       const tc = new TinyColor(color.value)
 
       if (!tc.isValid) {
-        setErrors((state) => [...(state || []), `Could not process the format of ${color.value}`])
+        setErrors((state) =>
+          removeDuplicates([...(state || []), `Could not process the format of ${color.value}`])
+        )
         return acc
       }
 

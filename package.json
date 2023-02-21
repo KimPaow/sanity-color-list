@@ -43,17 +43,22 @@
     "link-watch": "plugin-kit link-watch",
     "lint": "eslint .",
     "prepublishOnly": "npm run build",
-    "watch": "pkg-utils watch"
+    "watch": "pkg-utils watch",
+    "test": "vitest"
   },
   "dependencies": {
     "@ctrl/tinycolor": "^3.4.1",
     "@sanity/incompatible-plugin": "^1.0.4",
-    "@sanity/ui": "^0.37.22",
+    "@sanity/ui": "^1.2.5",
     "@types/styled-components": "^5.1.26"
   },
   "devDependencies": {
     "@sanity/pkg-utils": "^1.18.0",
     "@sanity/plugin-kit": "^2.1.16",
+    "@testing-library/dom": "^9.0.0",
+    "@testing-library/jest-dom": "^5.16.5",
+    "@testing-library/react": "^14.0.0",
+    "@testing-library/user-event": "^14.4.3",
     "@typescript-eslint/eslint-plugin": "^5.43.0",
     "@typescript-eslint/parser": "^5.43.0",
     "eslint": "^8.28.0",
@@ -65,10 +70,12 @@
     "prettier": "^2.7.1",
     "prettier-plugin-packagejson": "^2.3.0",
     "react": "^18",
+    "react-dom": "^18.2.0",
     "rimraf": "^3.0.2",
     "sanity": "3.0.0-rc.2",
     "styled-components": "^5.3.6",
-    "typescript": "^4.9.3"
+    "typescript": "^4.9.3",
+    "vitest": "^0.28.5"
   },
   "peerDependencies": {
     "react": "^18",
