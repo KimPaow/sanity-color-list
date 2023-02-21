@@ -36,7 +36,7 @@ export const ColorInner = styled.div<ColorInnerProps>`
       ${(props) => {
         const { color } = props?.theme?.sanity || {}
         return css`
-          box-shadow: 0px 0px 0px 2px ${color.base.focusRing};
+          box-shadow: 0px 0px 0px 2px ${color?.base.focusRing};
         `
       }}
     }

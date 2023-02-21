@@ -1,13 +1,5 @@
 import React, { useCallback, useState } from 'react'
-import {
-  ObjectOptions,
-  ObjectSchemaType,
-  ObjectInputProps,
-  set,
-  setIfMissing,
-  unset,
-  PatchEvent,
-} from 'sanity'
+import { ObjectOptions, ObjectSchemaType, ObjectInputProps, set, unset, PatchEvent } from 'sanity'
 import { Card, Inline, Stack, Text } from '@sanity/ui'
 import { BorderRadius, Color } from './Color'
 import { useColors } from '../hooks'
@@ -35,7 +27,7 @@ export type ColorListSchemaType = Omit<ObjectSchemaType, 'options'> & {
 export type ColorInputProps = ObjectInputProps<StudioColorValue, ColorListSchemaType>
 
 export const ColorListInput = (props: ColorInputProps) => {
-  const { onChange, schemaType: type, readOnly, value } = props
+  const { onChange, schemaType: type, value } = props
   const { borderRadius = { inner: '100%', outer: '100%' } } = type.options || {}
   const { colors, errors } = useColors(type?.options)
   const [currentColor, setCurrentColor] = useState(value)

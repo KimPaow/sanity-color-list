@@ -29,7 +29,7 @@ const sizes = {
   lg: '38px',
 }
 
-export const ColorContainer = styled.div<ColorContainerProps>`
+export const ColorContainer = styled.button<ColorContainerProps>`
   height: ${sizes.lg};
   width: ${sizes.lg};
   position: relative;
@@ -53,6 +53,17 @@ export const ColorContainer = styled.div<ColorContainerProps>`
     `}
 `
 
+const VisuallyHidden = styled.span`
+  position: absolute;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  height: 1px;
+  width: 1px;
+  margin: -1px;
+  padding: 0;
+  border: 0;
+`
+
 export const Color = ({ isActive, radius, color, onClick }: ColorProps) => {
   const handleClick = useCallback(
     () => onClick({ value: color.value, title: color.title }),
@@ -66,8 +77,10 @@ export const Color = ({ isActive, radius, color, onClick }: ColorProps) => {
       radius={radius.outer}
       onClick={handleClick}
     >
+      <VisuallyHidden>{`${color.title} ${isActive ? 'is selected' : ''}`}</VisuallyHidden>
       <AlphaPattern isActive={isActive} />
       <ColorInner
+        data-testid={`color-${color.title}`}
         isActive={isActive}
         radius={radius.inner}
         colorFill={color?.tc}
